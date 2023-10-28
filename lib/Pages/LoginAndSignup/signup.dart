@@ -39,6 +39,12 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
+                const Image(
+                  image: AssetImage('assets/logo.png'),
+                  height: 200,
+                  width: 200,
+                  fit: BoxFit.contain,
+                ),
                 Row(
                   children: [
                     SizedBox(
@@ -186,7 +192,7 @@ class _SignupPageState extends State<SignupPage> {
                   height: 20,
                 ),
                 googleLogin(context, size),
-                SizedBox(height: size.height * 0.15),
+                SizedBox(height: size.height * 0.1),
                 Container(
                   color: const Color.fromARGB(255, 62, 62, 62),
                   width: size.width,

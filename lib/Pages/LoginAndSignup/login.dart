@@ -1,9 +1,9 @@
+import 'package:club_hub/Pages/LoginAndSignup/signup.dart';
 import 'package:club_hub/main.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../services/auth.dart';
-import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -39,6 +39,12 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
+                const Image(
+                  image: AssetImage('assets/logo.png'),
+                  height: 200,
+                  width: 200,
+                  fit: BoxFit.contain,
+                ),
                 Row(
                   children: [
                     SizedBox(
