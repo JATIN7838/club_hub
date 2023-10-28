@@ -1,4 +1,4 @@
-package com.example.club_hub
+package com.yash.clubhub
 
 import io.flutter.embedding.android.FlutterActivity
 
