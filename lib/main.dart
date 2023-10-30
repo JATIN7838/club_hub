@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:club_hub/Pages/LoginAndSignup/login.dart';
 import 'package:club_hub/Pages/home/activity.dart';
+import 'package:club_hub/Pages/home/admin.dart';
 import 'package:club_hub/Pages/home/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +27,25 @@ class MyApp extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return const HomePage(currentIndex: 1);
+              return FutureBuilder<DocumentSnapshot>(
+                future: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .get(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    return HomePage(
+                      currentIndex: 1,
+                      profileType: snapshot.data!['profileType'].toString(),
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              );
             } else {
               return const LoginPage();
             }
@@ -36,7 +56,9 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   final int currentIndex;
-  const HomePage({super.key, required this.currentIndex});
+  final String profileType;
+  const HomePage(
+      {super.key, required this.currentIndex, required this.profileType});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -44,15 +66,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late int currentIndex;
+  late String profileType;
   final List<Widget> _pages = [
     const ActivityPage(),
     const ProfilePage(),
+    const AdminPage(),
   ];
 
   @override
   void initState() {
     super.initState();
     currentIndex = widget.currentIndex;
+    profileType = widget.profileType;
   }
 
   @override
@@ -72,16 +97,31 @@ class _HomePageState extends State<HomePage> {
             currentIndex = index;
           });
         },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: 'Activity',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        items: profileType == 'Admin'
+            ? const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.event),
+                  label: 'Activity',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.admin_panel_settings),
+                  label: 'Admin',
+                ),
+              ]
+            : const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.event),
+                  label: 'Activity',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
       ),
     );
   }

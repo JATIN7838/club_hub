@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:club_hub/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -163,12 +165,21 @@ class _SignupPageState extends State<SignupPage> {
                             passwordController.text, nameController.text);
                         if (context.mounted) Navigator.pop(context);
                         if (val == 'success') {
+                          String ptype = await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .get()
+                              .then((value) =>
+                                  value.data()!['profileType'].toString());
+
                           if (context.mounted) {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const HomePage(currentIndex: 1)));
+                                    builder: (context) => HomePage(
+                                          currentIndex: 1,
+                                          profileType: ptype,
+                                        )));
                           }
                           val = 'Registration Successful';
                         }
@@ -237,22 +248,41 @@ class _SignupPageState extends State<SignupPage> {
           );
         }
         String val = await Auth.googleLogin();
+        if (context.mounted) Navigator.pop(context);
         if (val == 'success') {
+          String ptype = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .get()
+              .then((value) => value.data()!['profileType'].toString());
+
           if (context.mounted) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomePage(currentIndex: 0),
+                builder: (context) => HomePage(
+                  currentIndex: 0,
+                  profileType: ptype,
+                ),
               ),
             );
           }
           val = 'Registration Successful';
         } else if (val == 'first') {
+          String ptype = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .get()
+              .then((value) => value.data()!['profileType'].toString());
+
           if (context.mounted) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomePage(currentIndex: 1),
+                builder: (context) => HomePage(
+                  currentIndex: 1,
+                  profileType: ptype,
+                ),
               ),
             );
           }

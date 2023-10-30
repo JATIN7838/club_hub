@@ -1,29 +1,29 @@
-import 'package:club_hub/Pages/LoginAndSignup/login.dart';
-import 'package:club_hub/main.dart';
+// import 'package:club_hub/Pages/LoginAndSignup/login.dart';
+// import 'package:club_hub/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
-class Auth extends GetxController {
-  late Rx<User?> _user;
-  @override
-  void onReady() {
-    super.onReady();
-    _user = Rx<User?>(FirebaseAuth.instance.currentUser);
-    _user.bindStream(FirebaseAuth.instance.authStateChanges());
-    ever(_user, _setInitialScreen);
-  }
+class Auth {
+  // late Rx<User?> _user;
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   _user = Rx<User?>(FirebaseAuth.instance.currentUser);
+  //   _user.bindStream(FirebaseAuth.instance.authStateChanges());
+  //   ever(_user, _setInitialScreen);
+  // }
 
-  _setInitialScreen(User? user) {
-    if (user == null) {
-      Get.offAll(() => const LoginPage());
-    } else {
-      Get.offAll(() => const HomePage(currentIndex: 0));
-    }
-  }
+  // _setInitialScreen(User? user) {
+  //   if (user == null) {
+  //     Get.offAll(() => const LoginPage());
+  //   } else {
+  //     Get.offAll(() => const HomePage(currentIndex: 0));
+  //   }
+  // }
 
   static savetofirestore(String? name, email, uid, photourl) async {
     await FirebaseFirestore.instance.collection('users').doc(uid).set({
