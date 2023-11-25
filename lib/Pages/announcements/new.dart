@@ -116,7 +116,7 @@ class _NewAnnouncePageState extends State<NewAnnouncePage> {
                                     height: size.height * 0.2,
                                     child: Image(
                                       image: FileImage(announce.image.value!),
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.fitHeight,
                                     ),
                                   ),
                               ],
@@ -182,9 +182,8 @@ class _NewAnnouncePageState extends State<NewAnnouncePage> {
                       style: TextStyle(fontSize: 16))));
               if (mounted) Navigator.pop(context);
             } else {
-              scaffoldMessenger.showSnackBar(const SnackBar(
-                  content: Text('Something went wrong !!',
-                      style: TextStyle(fontSize: 16))));
+              scaffoldMessenger.showSnackBar(SnackBar(
+                  content: Text(result, style: const TextStyle(fontSize: 16))));
             }
           }
         },

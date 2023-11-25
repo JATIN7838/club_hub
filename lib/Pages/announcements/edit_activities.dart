@@ -1,20 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:club_hub/Pages/home/actvity_item.dart';
+import 'package:club_hub/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ActivityPage extends StatefulWidget {
-  const ActivityPage({super.key});
+import 'edit.dart';
+
+class EditAnnouncePage extends StatefulWidget {
+  const EditAnnouncePage({super.key});
 
   @override
-  State<ActivityPage> createState() => _ActivityPageState();
+  State<EditAnnouncePage> createState() => _EditAnnouncePageState();
 }
 
-class _ActivityPageState extends State<ActivityPage> {
+class _EditAnnouncePageState extends State<EditAnnouncePage> {
   _fetchAnnouncements() async {
-    QuerySnapshot<Map<String, dynamic>> docs =
-        await FirebaseFirestore.instance.collection('announcements').get();
+    QuerySnapshot<Map<String, dynamic>> docs = await FirebaseFirestore.instance
+        .collection('announcements')
+        .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
     setState(() {
-      _activities = docs.docs.map((doc) => doc.data()).toList();
+      _activities = docs.docs
+          .map((doc) => {
+                'id': doc.id, // Add the document ID
+                ...doc.data(),
+              })
+          .toList();
       //order activities by date
       _activities.sort((a, b) => a['date'].compareTo(b['date']));
     });
@@ -25,37 +35,54 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   void initState() {
     super.initState();
-    //fetch data from firestore
     _fetchAnnouncements();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Center(
-        child: Container(
-          height: size.height,
-          width: size.width,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromARGB(255, 105, 104, 104),
-                Color.fromARGB(255, 62, 62, 62),
-                Colors.black
-              ],
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const HomePage(
+                      currentIndex: 2,
+                      profileType: 'Admin',
+                    )));
+        return Future.value(true);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Edit Announcements'),
+          backgroundColor: const Color.fromARGB(255, 105, 104, 104),
+          elevation: 0,
+        ),
+        body: Center(
+          child: Container(
+            height: size.height,
+            width: size.width,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.fromARGB(255, 105, 104, 104),
+                  Color.fromARGB(255, 62, 62, 62),
+                  Colors.black
+                ],
+              ),
             ),
+            child: ListView.builder(
+                itemCount: _activities.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20, left: 20, right: 20),
+                    child: activityItem(index),
+                  );
+                }),
           ),
-          child: ListView.builder(
-              itemCount: _activities.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                  child: activityItem(index),
-                );
-              }),
         ),
       ),
     );
@@ -67,11 +94,11 @@ class _ActivityPageState extends State<ActivityPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: ((context) => ActivityItem(
+                builder: ((context) => EditAnnouncement(
                     title: _activities[index]['title'],
                     description: _activities[index]['description'],
-                    imageUrl: _activities[index]['image'],
-                    createdBy: _activities[index]['createdBy']))));
+                    docId: _activities[index]['id'],
+                    imageUrl: _activities[index]['image']))));
       },
       child: Card(
         elevation: 5,

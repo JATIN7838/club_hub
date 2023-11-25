@@ -30,25 +30,6 @@ class Announce extends GetxController {
     createdBy.value = newCreatedBy;
   }
 
-  Future<String> updateinFirestore(String docId) async {
-    try {
-      final DateTime date = DateTime.now();
-      await FirebaseFirestore.instance
-          .collection('announcements')
-          .doc(docId)
-          .set({
-        'title': title.value,
-        'description': description.value,
-        'image': image.value?.path,
-        'date': date,
-        'createdBy': createdBy.value,
-      });
-      return 'success';
-    } catch (e) {
-      return e.toString();
-    }
-  }
-
   Future<String> createinFirestore(String url) async {
     try {
       final DateTime date = DateTime.now();
@@ -58,6 +39,7 @@ class Announce extends GetxController {
         'image': url,
         'date': date,
         'createdBy': createdBy.value,
+        'uid': FirebaseAuth.instance.currentUser!.uid,
       });
       return 'success';
     } catch (e) {
@@ -72,7 +54,11 @@ class Announce extends GetxController {
           .child('Announcements')
           .child(FirebaseAuth.instance.currentUser!.uid)
           .child(title.value);
-      UploadTask uploadTask = ref.putFile(image.value!);
+      UploadTask uploadTask = ref.putFile(
+          image.value!,
+          SettableMetadata(
+            contentType: "image/jpeg",
+          ));
       TaskSnapshot snap = await uploadTask;
       String url = await snap.ref.getDownloadURL();
       var result = await createinFirestore(url);

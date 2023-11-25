@@ -1,6 +1,8 @@
 import 'package:club_hub/Pages/announcements/new.dart';
 import 'package:flutter/material.dart';
 
+import '../announcements/edit_activities.dart';
+
 class AdminPage extends StatelessWidget {
   const AdminPage({super.key});
   @override
@@ -34,24 +36,58 @@ class AdminPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => const NewAnnouncePage())),
-            child: Container(
-              color: const Color.fromARGB(255, 122, 122, 122),
-              height: size.height * 0.2,
-              width: size.width * 0.7,
-              child: const Center(child: Text('New Announcement')),
+            child: Card(
+              elevation: 5,
+              color: const Color.fromARGB(255, 159, 167, 173),
+              child: SizedBox(
+                height: size.height * 0.2,
+                width: size.width * 0.7,
+                child: const Center(
+                    child: Text(
+                  'New Announcement',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black,
+                          offset: Offset(2, 2),
+                          blurRadius: 6,
+                        ),
+                      ]),
+                )),
+              ),
             ),
           ),
-          Container(
-            color: const Color.fromARGB(255, 122, 122, 122),
-            height: size.height * 0.2,
-            width: size.width * 0.7,
-            child: const Center(child: Text('Edit Announcement')),
-          ),
-          Container(
-            color: const Color.fromARGB(255, 122, 122, 122),
-            height: size.height * 0.2,
-            width: size.width * 0.7,
-            child: const Center(child: Text('Delete Announcement')),
+          InkWell(
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const EditAnnouncePage())),
+            child: Card(
+              elevation: 5,
+              color: const Color.fromARGB(255, 159, 167, 173),
+              child: SizedBox(
+                height: size.height * 0.2,
+                width: size.width * 0.7,
+                child: const Center(
+                    child: Text(
+                  'Edit Announcement',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black,
+                          offset: Offset(2, 2),
+                          blurRadius: 6,
+                        ),
+                      ]),
+                )),
+              ),
+            ),
           ),
         ]),
       ),
