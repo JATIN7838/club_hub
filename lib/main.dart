@@ -82,46 +82,49 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        currentIndex: currentIndex,
-        selectedIconTheme: const IconThemeData(color: Colors.blue),
-        selectedFontSize: 14,
-        selectedItemColor: const Color.fromARGB(255, 0, 140, 255),
-        unselectedItemColor: Colors.black,
-        onTap: (int index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        items: profileType == 'Admin'
-            ? const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.event),
-                  label: 'Activity',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profile',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.admin_panel_settings),
-                  label: 'Admin',
-                ),
-              ]
-            : const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.event),
-                  label: 'Activity',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profile',
-                ),
-              ],
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        body: _pages[currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.shifting,
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          currentIndex: currentIndex,
+          selectedIconTheme: const IconThemeData(color: Colors.blue),
+          selectedFontSize: 14,
+          selectedItemColor: const Color.fromARGB(255, 0, 140, 255),
+          unselectedItemColor: Colors.black,
+          onTap: (int index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
+          items: profileType == 'Admin'
+              ? const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.event),
+                    label: 'Activity',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    label: 'Profile',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.admin_panel_settings),
+                    label: 'Admin',
+                  ),
+                ]
+              : const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.event),
+                    label: 'Activity',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    label: 'Profile',
+                  ),
+                ],
+        ),
       ),
     );
   }

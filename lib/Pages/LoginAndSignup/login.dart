@@ -216,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
         if (context.mounted) {
           showDialog(
             context: context,
-            barrierDismissible: false,
+            barrierDismissible: true,
             builder: (BuildContext context) {
               return const Center(child: CircularProgressIndicator());
             },
